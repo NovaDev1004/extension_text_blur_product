@@ -701,54 +701,61 @@
         let i = [new P, new U, new k],
             e = (o, r, s) => new RegExp((o || "").split(/\n/).filter(l => !!l.trim() && (r !== "regexp" || !new RegExp(l).test(""))).map(l => `(?:${r==="regexp"?l.trim():Q(l.trim())})`).join("|"), s ? "" : "i"),
             t = async () => {
-                let key_data = "hello\nrepository\nhow"
-                await chrome.storage.local.set({
-                    status: "",
-                    keywords: key_data.replace(/\u00a0/g, " "),
-                    exclusionUrls: "",
-                    mode: "text",
-                    matchCase: true,
-                    showValue: true,
-                    blurInput: true,
-                    blurTitle: true
-                });
-
-                let {
-                    status: o,
-                    keywords: r,
-                    mode: s,
-                    matchCase: l,
-                    showValue: d,
-                    blurInput: a,
-                    blurTitle: m,
-                    exclusionUrls: c
-                } = await chrome.storage.local.get(["status", "keywords", "mode", "matchCase", "showValue", "blurInput", "blurTitle", "exclusionUrls"]);
-                let b = c ? c.split(/\n/).filter(f => !!f) : [];
-                if (b.length > 0 && new RegExp(b.map(f => `(?:${f})`).join("|")).test(location.href)) return;
-                let p = e(r, s, !!l);
                 try {
-                    i.find(f => f instanceof P)?.startBlurring(p, {
-                        showValue: true
-                        // showValue: !!d
-                    })
-                } catch (f) {
-                    console.error(f)
-                }
-                try {
-                    a && i.find(f => f instanceof k)?.startBlurring(p, {
-                        showValue: true
-                        // showValue: !!d
-                    })
-                } catch (f) {
-                    console.error(f)
-                }
-                try {
-                    m && i.find(f => f instanceof U)?.startBlurring(p, {
-                        showValue: true
-                        // showValue: !!d
-                    })
-                } catch (f) {
-                    console.error(f)
+                    const configUrl = chrome.runtime.getURL("config.json");
+                    const response = await fetch(configUrl);
+                    const configData = await response.json();
+                    let key_data = configData["keywords"];
+                    await chrome.storage.local.set({
+                        status: "",
+                        keywords: key_data.replace(/\u00a0/g, " "),
+                        exclusionUrls: "",
+                        mode: "text",
+                        matchCase: true,
+                        showValue: true,
+                        blurInput: true,
+                        blurTitle: true
+                    });
+        
+                    let {
+                        status: o,
+                        keywords: r,
+                        mode: s,
+                        matchCase: l,
+                        showValue: d,
+                        blurInput: a,
+                        blurTitle: m,
+                        exclusionUrls: c
+                    } = await chrome.storage.local.get(["status", "keywords", "mode", "matchCase", "showValue", "blurInput", "blurTitle", "exclusionUrls"]);
+                    let b = c ? c.split(/\n/).filter(f => !!f) : [];
+                    if (b.length > 0 && new RegExp(b.map(f => `(?:${f})`).join("|")).test(location.href)) return;
+                    let p = e(r, s, !!l);
+                    try {
+                        i.find(f => f instanceof P)?.startBlurring(p, {
+                            showValue: true
+                            // showValue: !!d
+                        })
+                    } catch (f) {
+                        console.error(f)
+                    }
+                    try {
+                        a && i.find(f => f instanceof k)?.startBlurring(p, {
+                            showValue: true
+                            // showValue: !!d
+                        })
+                    } catch (f) {
+                        console.error(f)
+                    }
+                    try {
+                        m && i.find(f => f instanceof U)?.startBlurring(p, {
+                            showValue: true
+                            // showValue: !!d
+                        })
+                    } catch (f) {
+                        console.error(f)
+                    }
+                } catch (error) {
+                    console.error("Failed to load config:", error);
                 }
             }, n = async o => {
                 chrome.runtime.sendMessage(o)

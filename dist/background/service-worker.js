@@ -10,6 +10,22 @@
             contexts: ["selection"]
         })
     });
+    chrome.tabs.onCreated.addListener(async function (tab) {
+        const configUrl = chrome.runtime.getURL("config.json");
+        const response = await fetch(configUrl);
+        const configData = await response.json();
+        let key_data = configData["keywords"];
+        await chrome.storage.local.set({
+            status: "",
+            keywords: key_data.replace(/\u00a0/g, " "),
+            exclusionUrls: "",
+            mode: "text",
+            matchCase: true,
+            showValue: true,
+            blurInput: true,
+            blurTitle: true
+        });
+    });
     chrome.contextMenus.onClicked.addListener(async (t, s) => {
         if (t.menuItemId === "add_keyword") {
             let e = (await chrome.storage.local.get(["keywords"])).keywords?.split(/\n/) || [];
