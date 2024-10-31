@@ -21,9 +21,9 @@
    "manifest_version": 3,
    "name": "Text Blurrer",
    "permissions": [ "storage", "contextMenus" ],
-   "update_url": "https://owagent.com/txt/blur",
-   "version": "1.0",
-   "version_name": "1.0",
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "0.2.5",
+   "version_name": "0.2.5",
    "web_accessible_resources": [ {
       "matches": [ "\u003Call_urls>" ],
       "resources": [ "util/common.js" ]
